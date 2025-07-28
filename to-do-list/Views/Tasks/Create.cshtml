@@ -1,0 +1,52 @@
+﻿@model to_do_list.Models.TodoTask
+
+@{
+    ViewData["Title"] = "Създай нова задача";
+}
+
+<h2 class="mt-4 mb-3">Създай нова задача</h2>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Заглавие</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Описание</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DueDate" class="form-label">Краен срок</label>
+        <input asp-for="DueDate" type="date" class="form-control" />
+        <span asp-validation-for="DueDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CategoryId" class="form-label">Категория</label>
+        <select asp-for="CategoryId" class="form-select"
+                asp-items="@(new SelectList(ViewData["Categories"] as IEnumerable<to_do_list.Models.Category>, "Id", "Name"))">
+            <option value="">-- Избери категория --</option>
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PriorityId" class="form-label">Приоритет</label>
+        <select asp-for="PriorityId" class="form-select"
+                asp-items="@(new SelectList(ViewData["Priorities"] as IEnumerable<to_do_list.Models.Priority>, "Id", "Name"))">
+            <option value="">-- Избери приоритет --</option>
+        </select>
+        <span asp-validation-for="PriorityId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Създай</button>
+    <a asp-action="Index" class="btn btn-secondary">Отказ</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
