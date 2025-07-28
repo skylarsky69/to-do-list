@@ -6,7 +6,7 @@ using to_do_list.Models;
 
 namespace to_do_list.Data
 {
-    public static class SeedData
+    public static class SeedCategoryData
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
@@ -14,9 +14,7 @@ namespace to_do_list.Data
                 serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>());
 
             if (context.Categories.Any())
-            {
-                return; // Категориите вече съществуват
-            }
+                return;
 
             context.Categories.AddRange(
                 new Category { Name = "Работа" },

@@ -23,7 +23,28 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Tasks" asp-action="Index">Моите задачи</a>
+                            <a class="nav-link text-dark" asp-controller="Tasks" asp-action="Index">Моите задачи</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Категории
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Categories" asp-action="Index">Всички категории</a>
+                                </li>
+                                <li><hr class="dropdown-divider" /></li>
+                                @if (ViewData["Categories"] is IEnumerable<to_do_list.Models.Category> allCategories)
+                                {
+                                    @foreach (var cat in allCategories)
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Tasks" asp-action="Index" asp-route-categoryId="@cat.Id">@cat.Name</a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
                         </li>
 
                         <li class="nav-item">
@@ -35,25 +56,22 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted mt-3">
         <div class="container">
             &copy; 2025 - to_do_list - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-controller="Categories" asp-action="Index">Категории</a>
-    </li>
-    <a asp-controller="Category" asp-action="Index" class="nav-link">Категории</a>
-
 </body>
 </html>

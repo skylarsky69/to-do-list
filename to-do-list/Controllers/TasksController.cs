@@ -46,10 +46,11 @@ namespace to_do_list.Controllers
         }
 
         // GET: /Tasks/Create
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int? categoryId = null)
         {
             ViewData["Categories"] = await _context.Categories.ToListAsync();
             ViewData["Priorities"] = await _context.Priorities.ToListAsync();
+            ViewData["SelectedCategory"] = categoryId;
             return View();
         }
 
@@ -70,6 +71,7 @@ namespace to_do_list.Controllers
 
             ViewData["Categories"] = await _context.Categories.ToListAsync();
             ViewData["Priorities"] = await _context.Priorities.ToListAsync();
+            ViewData["SelectedCategory"] = task.CategoryId;
             return View(task);
         }
 
@@ -143,6 +145,8 @@ namespace to_do_list.Controllers
 
             return View(task);
         }
+
+        // POST: /Tasks/ToggleStatus/5
         [HttpPost]
         public async Task<IActionResult> ToggleStatus(int id)
         {
@@ -155,9 +159,6 @@ namespace to_do_list.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
-
         }
-
-
     }
 }

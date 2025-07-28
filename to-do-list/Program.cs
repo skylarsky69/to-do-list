@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Свързване към SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Регистрация на Identity + роли
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
@@ -17,29 +15,30 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// MVC + Razor
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// Seed-ване на начални данни (роли + потребители)
+// 👉 Seed категории
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
     try
     {
-        await SeedData.InitializeAsync(services);
+        // Ако нямаш SeedData.cs с роли, коментирай реда долу:
+        // await SeedData.InitializeAsync(services);
+
+        SeedCategoryData.Initialize(services); // Добавя 14 категории
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Грешка при инициализация на SeedData.");
+        logger.LogError(ex, "Грешка при инициализация на Seed данните.");
     }
 }
 
-// Обработка на грешки
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -50,21 +49,15 @@ else
     app.UseDeveloperExceptionPage();
 }
 
-// Middleware
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Роутинг
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Tasks}/{action=Index}/{id?}");
-
 app.Run();

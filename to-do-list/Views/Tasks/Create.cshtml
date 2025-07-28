@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Създай нова задача";
+    var selectedCategory = ViewData["SelectedCategory"] as int?;
 }
 
 <h2 class="mt-4 mb-3">Създай нова задача</h2>
@@ -28,7 +29,7 @@
     <div class="mb-3">
         <label asp-for="CategoryId" class="form-label">Категория</label>
         <select asp-for="CategoryId" class="form-select"
-                asp-items="@(new SelectList(ViewData["Categories"] as IEnumerable<to_do_list.Models.Category>, "Id", "Name"))">
+                asp-items="@(new SelectList(ViewData["Categories"] as IEnumerable<to_do_list.Models.Category>, "Id", "Name", selectedCategory))">
             <option value="">-- Избери категория --</option>
         </select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
