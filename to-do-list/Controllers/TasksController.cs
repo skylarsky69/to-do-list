@@ -19,7 +19,13 @@ namespace to_do_list.Controllers
             _userManager = userManager;
         }
 
-        // GET: /Tasks
+        private async Task LoadViewDataAsync(object? selectedCategory = null)
+        {
+            ViewData["Categories"] = await _context.Categories.ToListAsync();
+            ViewData["Priorities"] = await _context.Priorities.ToListAsync();
+            ViewData["SelectedCategory"] = selectedCategory;
+        }
+
         public async Task<IActionResult> Index(string searchString, int? categoryId, int? priorityId)
         {
             var currentUserId = _userManager.GetUserId(User);
@@ -38,28 +44,24 @@ namespace to_do_list.Controllers
             if (priorityId.HasValue)
                 query = query.Where(t => t.PriorityId == priorityId.Value);
 
-            ViewData["Categories"] = await _context.Categories.ToListAsync();
-            ViewData["Priorities"] = await _context.Priorities.ToListAsync();
-
+            await LoadViewDataAsync(categoryId);
             var tasks = await query.ToListAsync();
             return View(tasks);
         }
 
-        // GET: /Tasks/Create
         public async Task<IActionResult> Create(int? categoryId = null)
         {
-            ViewData["Categories"] = await _context.Categories.ToListAsync();
-            ViewData["Priorities"] = await _context.Priorities.ToListAsync();
-            ViewData["SelectedCategory"] = categoryId;
+            await LoadViewDataAsync(categoryId);
             return View();
         }
 
-        // POST: /Tasks/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TodoTask task)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
             task.UserId = user.Id;
 
             if (ModelState.IsValid)
@@ -69,43 +71,47 @@ namespace to_do_list.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["Categories"] = await _context.Categories.ToListAsync();
-            ViewData["Priorities"] = await _context.Priorities.ToListAsync();
-            ViewData["SelectedCategory"] = task.CategoryId;
+            await LoadViewDataAsync(task.CategoryId);
             return View(task);
         }
 
-        // GET: /Tasks/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var task = await _context.TodoTasks.FindAsync(id);
-            if (task == null) return NotFound();
+            var currentUserId = _userManager.GetUserId(User);
 
-            ViewData["Categories"] = await _context.Categories.ToListAsync();
-            ViewData["Priorities"] = await _context.Priorities.ToListAsync();
+            if (task == null || task.UserId != currentUserId)
+                return Unauthorized();
+
+            await LoadViewDataAsync(task.CategoryId);
             return View(task);
         }
 
-        // POST: /Tasks/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, TodoTask task)
         {
-            if (id != task.Id) return NotFound();
+            var currentUserId = _userManager.GetUserId(User);
+
+            if (id != task.Id)
+                return NotFound();
+
+            var existingTask = await _context.TodoTasks.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
+            if (existingTask == null || existingTask.UserId != currentUserId)
+                return Unauthorized();
 
             if (ModelState.IsValid)
             {
+                task.UserId = currentUserId;
                 _context.Update(task);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["Categories"] = await _context.Categories.ToListAsync();
-            ViewData["Priorities"] = await _context.Priorities.ToListAsync();
+            await LoadViewDataAsync(task.CategoryId);
             return View(task);
         }
 
-        // GET: /Tasks/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var task = await _context.TodoTasks
@@ -113,18 +119,18 @@ namespace to_do_list.Controllers
                 .Include(t => t.Priority)
                 .FirstOrDefaultAsync(t => t.Id == id);
 
-            if (task == null) return NotFound();
+            if (task == null || task.UserId != _userManager.GetUserId(User))
+                return NotFound();
 
             return View(task);
         }
 
-        // POST: /Tasks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var task = await _context.TodoTasks.FindAsync(id);
-            if (task != null)
+            if (task != null && task.UserId == _userManager.GetUserId(User))
             {
                 _context.TodoTasks.Remove(task);
                 await _context.SaveChangesAsync();
@@ -133,7 +139,6 @@ namespace to_do_list.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Tasks/Details/5
         public async Task<IActionResult> Details(int id)
         {
             var task = await _context.TodoTasks
@@ -141,12 +146,12 @@ namespace to_do_list.Controllers
                 .Include(t => t.Priority)
                 .FirstOrDefaultAsync(t => t.Id == id);
 
-            if (task == null) return NotFound();
+            if (task == null || task.UserId != _userManager.GetUserId(User))
+                return NotFound();
 
             return View(task);
         }
 
-        // POST: /Tasks/ToggleStatus/5
         [HttpPost]
         public async Task<IActionResult> ToggleStatus(int id)
         {
