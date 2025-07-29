@@ -1,39 +1,35 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using to_do_list.Data;
 using to_do_list.Models;
 
 namespace to_do_list.Controllers
 {
-    [Authorize]
-    public class CategoryController : Controller
+    public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CategoryController(ApplicationDbContext context)
+        public CategoriesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            var categories = await _context.Categories.ToListAsync();
-            return View(categories);
+            return View(await _context.Categories.ToListAsync());
         }
 
         public async Task<IActionResult> Edit(int id)
         {
             var category = await _context.Categories.FindAsync(id);
             if (category == null) return NotFound();
-
             return View(category);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Category category)
+        public async Task<IActionResult> Edit(int id, Category category)
         {
+            if (id != category.Id) return BadRequest();
             if (ModelState.IsValid)
             {
                 _context.Update(category);
@@ -47,12 +43,10 @@ namespace to_do_list.Controllers
         {
             var category = await _context.Categories.FindAsync(id);
             if (category == null) return NotFound();
-
             return View(category);
         }
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _context.Categories.FindAsync(id);
