@@ -22,10 +22,30 @@ namespace to_do_list.Controllers
         public async Task<IActionResult> Dashboard()
         {
             var users = await _context.Users.ToListAsync();
+
             var tasks = await _context.TodoTasks
                 .Include(t => t.Category)
                 .Include(t => t.Priority)
                 .ToListAsync();
+
+            var tasksByCategory = tasks
+                .GroupBy(t => t.Category?.Name ?? "Без категория")
+                .Select(g => new CategoryStats
+                {
+                    Category = g.Key,
+                    Count = g.Count()
+                })
+                .ToList();
+
+            var tasksPerUser = tasks
+                .Where(t => t.UserId != null)
+                .GroupBy(t => t.UserId)
+                .Select(g => new UserStats
+                {
+                    UserId = g.Key!,
+                    Count = g.Count()
+                })
+                .ToList();
 
             var viewModel = new AdminDashboardViewModel
             {
@@ -33,14 +53,8 @@ namespace to_do_list.Controllers
                 TotalTasks = tasks.Count,
                 CompletedTasks = tasks.Count(t => t.IsCompleted),
                 IncompleteTasks = tasks.Count(t => !t.IsCompleted),
-                TasksByCategory = tasks
-                    .GroupBy(t => t.Category?.Name ?? "Без категория")
-                    .Select(g => new CategoryStats { Category = g.Key, Count = g.Count() })
-                    .ToList(),
-                TasksPerUser = tasks
-                    .GroupBy(t => t.UserId)
-                    .Select(g => new UserStats { UserId = g.Key, Count = g.Count() })
-                    .ToList(),
+                TasksByCategory = tasksByCategory,
+                TasksPerUser = tasksPerUser,
                 Users = users
             };
 
