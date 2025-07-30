@@ -1,0 +1,136 @@
+﻿@model to_do_list.Models.ViewModels.AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Админ табло";
+}
+
+<h2 class="mb-4">Админ табло</h2>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Потребители</h5>
+                <p class="card-text display-6">@Model.TotalUsers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-secondary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Всички задачи</h5>
+                <p class="card-text display-6">@Model.TotalTasks</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Завършени</h5>
+                <p class="card-text display-6">@Model.CompletedTasks</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Незавършени</h5>
+                <p class="card-text display-6">@Model.IncompleteTasks</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4 class="mt-4">Диаграми</h4>
+<div class="row mb-5">
+    <div class="col-md-6 text-center">
+        <h6>По категории</h6>
+        <canvas id="tasksByCategoryChart" width="200" height="100"></canvas>
+    </div>
+    <div class="col-md-6 text-center">
+        <h6>По потребители</h6>
+        <canvas id="tasksByUserChart" width="200" height="200"></canvas>
+    </div>
+</div>
+
+<hr />
+
+<h4 class="mt-4">Задачи по категория (таблица)</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Категория</th>
+            <th>Брой</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.TasksByCategory)
+        {
+            <tr>
+                <td>@item.Category</td>
+                <td>@item.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h4 class="mt-5">Задачи по потребител</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Потребител</th>
+            <th>Брой задачи</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.TasksPerUser)
+        {
+            var username = Model.Users.FirstOrDefault(u => u.Id == item.UserId)?.UserName ?? "(неизвестен)";
+            <tr>
+                <td>@username</td>
+                <td>@item.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        const categoryCtx = document.getElementById('tasksByCategoryChart');
+        new Chart(categoryCtx, {
+            type: 'pie',
+            data: {
+                labels: [@Html.Raw(string.Join(",", Model.TasksByCategory.Select(c => $"'{c.Category}'")))],
+                datasets: [{
+                    data: [@string.Join(",", Model.TasksByCategory.Select(c => c.Count))],
+                    backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        const userCtx = document.getElementById('tasksByUserChart');
+        new Chart(userCtx, {
+            type: 'bar',
+            data: {
+                labels: [@Html.Raw(string.Join(",", Model.TasksPerUser.Select(u => $"'{Model.Users.FirstOrDefault(x => x.Id == u.UserId)?.UserName ?? "неизвестен"}'")))],
+                datasets: [{
+                    label: 'Брой задачи',
+                    data: [@string.Join(",", Model.TasksPerUser.Select(u => u.Count))],
+                    backgroundColor: '#17a2b8'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+}

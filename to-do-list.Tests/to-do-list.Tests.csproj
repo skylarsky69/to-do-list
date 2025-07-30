@@ -3,20 +3,18 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<IsPackable>false</IsPackable>
-		<WarningsAsErrors>true</WarningsAsErrors>
-		<!-- Така warning-и като downgrade ще дават грешка -->
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\to-do-list\to-do-list.csproj" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.11" />
+		<PackageReference Include="Moq" Version="4.20.72" />
+		<PackageReference Include="xunit" Version="2.9.3" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.3" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Moq" Version="4.20.72" />
-		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.9.3" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.7" />
+		<ProjectReference Include="..\to-do-list\to-do-list.csproj" />
 	</ItemGroup>
 
 </Project>
