@@ -1,13 +1,13 @@
 ﻿@model to_do_list.Models.Category
 
 @{
-    ViewData["Title"] = "Редактирай категория";
+    ViewData["Title"] = "Добави категория";
 }
 
 <h2 class="mb-4">@ViewData["Title"]</h2>
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken() <!-- 🔒 ЗАДЪЛЖИТЕЛНО ЗА РАБОТА НА POST -->
 
     <div class="mb-3">
         <label asp-for="Name" class="form-label">Име на категория</label>
@@ -15,8 +15,8 @@
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-success">
-        <i class="bi bi-check-circle"></i> Запази
+    <button type="submit" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Създай
     </button>
     <a asp-action="Index" class="btn btn-outline-secondary ms-2">Отказ</a>
 </form>

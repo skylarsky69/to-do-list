@@ -41,6 +41,7 @@ namespace to_do_list.Controllers
             return View(category);
         }
 
+
         // 👉 GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
@@ -76,18 +77,10 @@ namespace to_do_list.Controllers
             return View(category);
         }
 
-        // 👉 GET: Categories/Delete/5
-        public async Task<IActionResult> Delete(int id)
-        {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null) return NotFound();
-            return View(category);
-        }
-
-        // 👉 POST: Categories/DeleteConfirmed/5
-        [HttpPost, ActionName("Delete")]
+        // 👉 POST: Categories/Delete/5 (изтриване директно с form бутон)
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var category = await _context.Categories.FindAsync(id);
             if (category != null)
