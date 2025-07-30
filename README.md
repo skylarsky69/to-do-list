@@ -56,13 +56,4 @@
 - **Identity (User & Role management)**
 - **Responsive Design**
 
----
-
-## 🛠️ Как да стартирате проекта
-
-```bash
-git clone https://github.com/your-username/taskermaster.git
-cd taskermaster
-dotnet build
-dotnet run
 
