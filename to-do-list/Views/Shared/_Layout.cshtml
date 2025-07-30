@@ -8,24 +8,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - to_do_list</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/to_do_list.styles.css" asp-append-version="true" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/site.css" />
     <link id="themeStylesheet" rel="stylesheet" href="~/css/light-theme.css" />
-   
 
-
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white bg-opacity-75 shadow-sm backdrop-blur rounded-bottom border-bottom">
+        <nav class="navbar navbar-expand-sm shadow-sm border-bottom bg-opacity-75 backdrop-blur rounded-bottom" id="mainNavbar">
             <div class="container-fluid">
-                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
                     <i class="bi bi-check2-square me-1"></i> TaskerMaster
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
@@ -34,25 +31,25 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1 gap-2">
                         <li class="nav-item">
-                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" && ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "fw-bold border-bottom border-primary" : "")"
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "fw-bold border-bottom border-primary" : "") text-nav"
                                asp-controller="Home" asp-action="Index">
                                 <i class="bi bi-house-door me-1"></i> Начало
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Tasks" ? "fw-bold border-bottom border-success" : "")"
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Tasks" ? "fw-bold border-bottom border-success" : "") text-nav"
                                asp-controller="Tasks" asp-action="Index">
                                 <i class="bi bi-list-check me-1"></i> Моите задачи
                             </a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-folder2-open me-1"></i> Категории
+                            <a class="nav-link dropdown-toggle text-nav" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-tags me-1"></i> Категории
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
                                     <a class="dropdown-item" asp-controller="Categories" asp-action="Index">
-                                        <i class="bi bi-collection me-1"></i> Всички категории
+                                        <i class="bi bi-folder-fill me-1"></i> Всички категории
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider" /></li>
@@ -72,28 +69,27 @@
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-danger fw-bold @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "border-bottom border-danger" : "")"
+                                <a class="nav-link fw-bold text-danger @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "border-bottom border-danger" : "")"
                                    asp-controller="Admin" asp-action="Dashboard">
-                                    <i class="bi bi-shield-lock me-1"></i> Админ табло
+                                    <i class="bi bi-shield-lock-fill me-1"></i> Админ табло
                                 </a>
                             </li>
                         }
-                        <li class="nav-item d-flex align-items-center ms-2">
+
+                        <!-- Theme toggle -->
+                        <li class="nav-item d-flex align-items-center ms-3">
                             <i class="bi bi-sun-fill me-1"></i>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="themeToggle">
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input" type="checkbox" id="themeToggle" />
                             </div>
                             <i class="bi bi-moon-fill ms-1"></i>
                         </li>
-                        
-
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
-
 
     <div class="container">
         <main role="main" class="pb-3">
@@ -103,38 +99,49 @@
 
     <footer class="border-top footer text-muted mt-3">
         <div class="container">
-            &copy; 2025 - to_do_list - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - to_do_list - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
-    <!-- Chart.js глобално, така че да е достъпен във всяка страница -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     @RenderSection("Scripts", required: false)
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const themeToggle = document.getElementById('themeToggle');
-            const themeLink = document.getElementById('themeStylesheet');
+            const themeToggle = document.getElementById("themeToggle");
+            const themeLink = document.getElementById("themeStylesheet");
+            const navbar = document.getElementById("mainNavbar");
+            const navLinks = document.querySelectorAll(".text-nav");
 
             function setTheme(theme) {
-                themeLink.setAttribute("href", `/css/${theme}-theme.css`);
-                localStorage.setItem('theme', theme);
+                themeLink.href = `/css/${theme}-theme.css`;
+                localStorage.setItem("theme", theme);
+
+                if (theme === "dark") {
+                    navbar.classList.remove("bg-white");
+                    navbar.classList.add("bg-dark");
+                    navLinks.forEach(link => link.classList.remove("text-dark"));
+                    navLinks.forEach(link => link.classList.add("text-white"));
+                } else {
+                    navbar.classList.remove("bg-dark");
+                    navbar.classList.add("bg-white");
+                    navLinks.forEach(link => link.classList.remove("text-white"));
+                    navLinks.forEach(link => link.classList.add("text-dark"));
+                }
             }
 
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedTheme = localStorage.getItem("theme") || "light";
+            themeToggle.checked = savedTheme === "dark";
             setTheme(savedTheme);
-            if (themeToggle) themeToggle.checked = savedTheme === 'dark';
 
-            if (themeToggle) {
-                themeToggle.addEventListener('change', function () {
-                    const newTheme = this.checked ? 'dark' : 'light';
-                    setTheme(newTheme);
-                });
-            }
+            themeToggle.addEventListener("change", function () {
+                const theme = this.checked ? "dark" : "light";
+                setTheme(theme);
+            });
         });
     </script>
 </body>
