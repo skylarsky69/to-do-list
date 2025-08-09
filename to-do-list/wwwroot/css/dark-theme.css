@@ -1,65 +1,138 @@
-﻿body {
-    background-color: #121212;
-    color: #e0e0e0;
+﻿/* ====== Dark theme base (Bootstrap 5 friendly) ====== */
+:root {
+    /* твои базови цветове */
+    --bg-body: #0b0e12;
+    --bg-surface: #10141a;
+    --bg-panel: #121821;
+    --border: #1b2330;
+    --text: #e7ecf3;
+    --text-muted: #a8b0bd;
+    /* подменяме Bootstrap CSS променливите */
+    --bs-body-bg: var(--bg-body);
+    --bs-body-color: var(--text);
+    --bs-card-bg: var(--bg-surface);
+    --bs-card-color: var(--text);
+    --bs-card-border-color: var(--border);
+    --bs-list-group-bg: var(--bg-surface);
+    --bs-list-group-color: var(--text);
+    --bs-list-group-border-color: var(--border);
+    --bs-dropdown-bg: var(--bg-panel);
+    --bs-dropdown-link-color: var(--text);
+    --bs-dropdown-link-hover-bg: #1b2330;
+    --bs-table-bg: var(--bg-surface);
+    --bs-table-color: var(--text);
+    --bs-table-border-color: var(--border);
+    --bs-border-color: var(--border);
+    --bs-link-color: #a8c5ff;
+    --bs-link-hover-color: #cfe0ff;
 }
 
-.navbar {
-    background-color: rgba(18, 18, 18, 0.95);
-    box-shadow: 0 2px 4px rgba(255,255,255,0.1);
+/* фон + текст */
+body {
+    background: var(--bg-body) !important;
+    color: var(--text) !important;
 }
 
-.card {
-    background-color: #1e1e1e;
-    border: none;
-    border-radius: 1rem;
-    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
+/* ====== Navbar (тъмна) ====== */
+#mainNavbar {
+    background-color: var(--bg-panel) !important;
+    border-bottom: 1px solid var(--border) !important;
 }
 
-.btn-primary {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
+    #mainNavbar .navbar-brand,
+    #mainNavbar .nav-link,
+    #mainNavbar .dropdown-toggle {
+        color: var(--text) !important;
+    }
+
+        #mainNavbar .nav-link:hover,
+        #mainNavbar .dropdown-item:hover {
+            color: #ffc107 !important;
+        }
+
+    #mainNavbar .dropdown-menu {
+        background: var(--bg-panel) !important;
+        border: 1px solid var(--border) !important;
+    }
+
+    #mainNavbar .dropdown-item {
+        color: var(--text) !important;
+    }
+
+/* ====== Cards / panels ====== */
+.card,
+.card .card-body,
+.card .card-header,
+.card .card-footer {
+    background-color: var(--bg-surface) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
 }
 
-footer {
-    background-color: #1a1a1a;
-    color: #aaa;
-}
-table,
-table th,
-table td {
-    color: #ffffff; /* Бял текст */
-    background-color: #1e1e1e; /* Тъмен фон */
-    border-color: #444; /* По-видими граници */
-}
+    /* ====== List group – това е „бялото блокче“ ====== */
+    .list-group,
+    .list-group-flush,
+    .card .list-group,
+    .card .list-group-flush {
+        background-color: var(--bg-surface) !important;
+        border-color: var(--border) !important;
+    }
 
+        .list-group-item,
+        .card .list-group-item,
+        .list-group-flush > .list-group-item,
+        .card .list-group-flush > .list-group-item {
+            background-color: var(--bg-surface) !important; /* ключът към проблема */
+            color: var(--text) !important;
+            border-color: var(--border) !important;
+        }
+
+            .list-group-item-action:hover,
+            .list-group-item:hover {
+                background-color: #0d1218 !important;
+            }
+
+/* ====== Tables ====== */
+.table,
+.table th,
+.table td,
 .table thead th {
-    color: #f8f9fa;
-    border-bottom: 2px solid #555;
+    background-color: var(--bg-surface) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
 }
 
 .table-hover tbody tr:hover {
-    background-color: #2c2c2c;
-}
-/* Тъмна навигация */
-.navbar {
-    background-color: #212529 !important;
-    border-bottom: 1px solid #444;
+    background-color: #0d1218 !important;
 }
 
-    .navbar .nav-link,
-    .navbar .navbar-brand,
-    .navbar .dropdown-toggle,
-    .navbar .dropdown-item {
-        color: #ffffff !important;
+/* ====== Forms ====== */
+.form-control,
+.form-select,
+.input-group-text {
+    background-color: #0f141a !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+}
+
+    .form-control::placeholder {
+        color: var(--text-muted) !important;
     }
 
-        .navbar .nav-link:hover,
-        .navbar .dropdown-item:hover {
-            color: #ffc107 !important; /* Жълт hover ефект */
-        }
+/* ====== Utility: ако имаш някъде bg-white/bg-light в markup ====== */
+.bg-white,
+.bg-light {
+    background-color: var(--bg-surface) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+}
 
-    /* Drop down background */
-    .navbar .dropdown-menu {
-        background-color: #2c2c2c;
-        border: 1px solid #555;
+/* Footer */
+footer.footer {
+    background-color: var(--bg-panel) !important;
+    color: var(--text-muted) !important;
+}
+
+    footer.footer a {
+        color: var(--text) !important;
     }
