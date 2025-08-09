@@ -2,33 +2,148 @@
     ViewData["Title"] = "Начало";
 }
 
-<div class="text-center mt-5">
-    <h1 class="display-4">Добре дошъл в TaskerMaster!</h1>
-    <p class="lead">Твоят лесен и красив начин да управляваш задачите си.</p>
-
-    <a class="btn btn-primary btn-lg mt-4" asp-controller="Tasks" asp-action="Index">
-        <i class="bi bi-check2-circle"></i> Виж моите задачи
-    </a>
-</div>
-
-
-<section class="features-dark text-center mt-5">
-    <h2>🌙 Защо TaskerMaster в тъмна тема?</h2>
-    <div class="row justify-content-center mt-4">
-        <div class="col-md-3 feature-card-dark m-2">
-            <i class="bi bi-lightning-charge-fill fs-1"></i>
-            <h5 class="mt-3">Бързина</h5>
-            <p>Лек и изключително бърз интерфейс без излишни забавяния.</p>
+<!-- Hero -->
+<section class="py-5 py-lg-6">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-3">Добре дошъл в <span class="text-primary">TaskerMaster</span>!</h1>
+        <p class="lead text-muted mb-4">
+            Умният и лек начин да управляваш задачите си — с категории, приоритети, тъмна/светла тема и админ табло.
+        </p>
+        <div class="d-flex justify-content-center gap-2">
+            <a asp-controller="Tasks" asp-action="Index" class="btn btn-primary btn-lg">
+                <i class="bi bi-check2-circle me-1"></i> Виж моите задачи
+            </a>
+            <a asp-controller="Tasks" asp-action="Create" class="btn btn-outline-secondary btn-lg">
+                <i class="bi bi-plus-circle me-1"></i> Нова задача
+            </a>
         </div>
-        <div class="col-md-3 feature-card-dark m-2">
-            <i class="bi bi-eye-fill fs-1"></i>
-            <h5 class="mt-3">Оптимизиран за очи</h5>
-            <p>По-малко натоварване за очите по време на дълга работа вечер.</p>
+    </div>
+</section>
+
+<!-- Акценти -->
+<section class="py-4">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 rounded-4 shadow-sm hover-rise">
+                    <div class="card-body p-4">
+                        <div class="display-6 mb-2"><i class="bi bi-lightning-charge"></i></div>
+                        <h5 class="card-title">Мигновено и интуитивно</h5>
+                        <p class="card-text text-muted">
+                            Бърз интерфейс, чист списък със задачи, филтри по категория/приоритет, търсене и сортиране.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 rounded-4 shadow-sm hover-rise">
+                    <div class="card-body p-4">
+                        <div class="display-6 mb-2"><i class="bi bi-shield-lock"></i></div>
+                        <h5 class="card-title">Сигурност и роли</h5>
+                        <p class="card-text text-muted">
+                            Отделни роли <strong>User</strong>/<strong>Admin</strong> и админ табло със статистики и диаграми.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 rounded-4 shadow-sm hover-rise">
+                    <div class="card-body p-4">
+                        <div class="display-6 mb-2"><i class="bi bi-moon-stars"></i></div>
+                        <h5 class="card-title">Теми</h5>
+                        <p class="card-text text-muted">
+                            Светла и тъмна тема с автоматично запомняне на избора ти.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-3 feature-card-dark m-2">
-            <i class="bi bi-graph-up fs-1"></i>
-            <h5 class="mt-3">Прогрес и анализ</h5>
-            <p>Следи напредъка си с автоматични статистики и диаграми.</p>
+    </div>
+</section>
+
+<!-- Какво ново -->
+<section class="py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="d-flex align-items-center mb-3">
+            <h3 class="mb-0"><i class="bi bi-megaphone me-2"></i> Какво ново</h3>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="list-group shadow-sm">
+                    <div class="list-group-item d-flex">
+                        <div class="me-3 text-primary"><i class="bi bi-bar-chart-line fs-4"></i></div>
+                        <div>
+                            <div class="fw-semibold">Подобрено админ табло</div>
+                            <small class="text-muted">Диаграми по категории и потребители, по-добри карти.</small>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex">
+                        <div class="me-3 text-success"><i class="bi bi-palette fs-4"></i></div>
+                        <div>
+                            <div class="fw-semibold">Тъмна/светла тема</div>
+                            <small class="text-muted">Запазване на предпочитанията и стилизирана навигация.</small>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex">
+                        <div class="me-3 text-warning"><i class="bi bi-tags fs-4"></i></div>
+                        <div>
+                            <div class="fw-semibold">Категории и приоритети</div>
+                            <small class="text-muted">Филтри в списъка и цветни приоритети.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Какво предстои (roadmap) -->
+            <div class="col-md-6">
+                <div class="card rounded-4 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-rocket-takeoff me-2"></i> Какво предстои</h5>
+                        <ul class="list-unstyled mb-3">
+                            <li class="mb-2"><i class="bi bi-check2-square text-primary me-2"></i>Подзадачи (чеклист в задачата)</li>
+                            <li class="mb-2"><i class="bi bi-calendar4-week text-primary me-2"></i>Календарен изглед (drag & drop срокове)</li>
+                            <li class="mb-2"><i class="bi bi-paperclip text-primary me-2"></i>Прикачени файлове към задачи</li>
+                            <li class="mb-2"><i class="bi bi-arrow-left-right text-primary me-2"></i>Импорт/Експорт (CSV/Excel)</li>
+                        </ul>
+                        <a asp-controller="Tasks" asp-action="Index" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-right-circle me-1"></i> Започни сега
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Мини „истории на успеха“ -->
+<section class="py-5">
+    <div class="container">
+        <h3 class="mb-4"><i class="bi bi-stars me-2"></i> От потребителите</h3>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card rounded-4 shadow-sm h-100 hover-rise">
+                    <div class="card-body">
+                        <p class="mb-2">„Прехвърлих целия си екип – супер бързо и ясно!“</p>
+                        <small class="text-muted">— Иван, Project Manager</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card rounded-4 shadow-sm h-100 hover-rise">
+                    <div class="card-body">
+                        <p class="mb-2">„Тъмната тема ме спаси вечер — очите ми благодарят.“</p>
+                        <small class="text-muted">— Мария, Фрийланс дизайнер</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card rounded-4 shadow-sm h-100 hover-rise">
+                    <div class="card-body">
+                        <p class="mb-2">„Админ таблото ми дава поглед за 10 сек.“</p>
+                        <small class="text-muted">— Георги, Екипен лидер</small>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

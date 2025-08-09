@@ -24,3 +24,11 @@ footer {
     background-color: #f1f1f1;
     color: #6c757d;
 }
+.hover-rise {
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+    .hover-rise:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(0,0,0,.08);
+    }
