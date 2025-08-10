@@ -3,19 +3,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using System.Collections.Generic;
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using to_do_list.Controllers;
 using to_do_list.Data;
 using to_do_list.Models;
-using Xunit;
-using System.Linq;
-
-
 using to_do_list.Services;
-using to_do_list.Services.Interfaces;
 
 public class TasksControllerTests
 {
@@ -23,12 +18,11 @@ public class TasksControllerTests
     {
         var store = new Mock<IUserStore<ApplicationUser>>();
         var mgr = new Mock<UserManager<ApplicationUser>>(store.Object, null, null, null, null, null, null, null, null);
-
         mgr.Setup(x => x.GetUserId(It.IsAny<ClaimsPrincipal>())).Returns(userId);
         return mgr.Object;
     }
 
-    [Fact]
+    [Xunit.Fact]
     public async Task Index_ReturnsViewWithUserTasks()
     {
         var dbName = Guid.NewGuid().ToString();
@@ -39,16 +33,16 @@ public class TasksControllerTests
 
         var testUserId = "user123";
 
-       
-        using (var context = new ApplicationDbContext(options))
+        // seed
+        using (var seedCtx = new ApplicationDbContext(options))
         {
             var category = new Category { Id = 1, Name = "Тест Категория" };
             var priority = new Priority { Id = 1, Name = "Висок", Color = "#ff0000" };
 
-            context.Categories.Add(category);
-            context.Priorities.Add(priority);
+            seedCtx.Categories.Add(category);
+            seedCtx.Priorities.Add(priority);
 
-            context.TodoTasks.Add(new TodoTask
+            seedCtx.TodoTasks.Add(new TodoTask
             {
                 Title = "Тест задача",
                 UserId = testUserId,
@@ -57,17 +51,17 @@ public class TasksControllerTests
                 PriorityId = priority.Id
             });
 
-            await context.SaveChangesAsync();
+            await seedCtx.SaveChangesAsync();
         }
 
-        
+        // run test
         using (var context = new ApplicationDbContext(options))
         {
             var taskService = new TaskService(context);
             var userManager = MockUserManagerReturning(testUserId);
 
-          
-            var controller = new TasksController(taskService, userManager);
+            // 👉 подаваме и context към конструктора
+            var controller = new TasksController(taskService, userManager, context);
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(new[]
             {
@@ -81,11 +75,11 @@ public class TasksControllerTests
 
             var result = await controller.Index(null, null, null);
 
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<IEnumerable<TodoTask>>(viewResult.Model);
+            var viewResult = Xunit.Assert.IsType<ViewResult>(result);
+            var model = Xunit.Assert.IsAssignableFrom<System.Collections.Generic.IEnumerable<TodoTask>>(viewResult.Model);
 
-            Assert.Single(model);
-            Assert.Equal("Тест задача", model.First().Title);
+            Xunit.Assert.Single(model);
+            Xunit.Assert.Equal("Тест задача", model.First().Title);
         }
     }
 }
