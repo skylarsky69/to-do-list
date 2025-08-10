@@ -8,7 +8,7 @@ using Xunit;
 using System.Linq;
 using System.Collections.Generic;
 
-// НОВО:
+
 using to_do_list.Services;
 using to_do_list.Services.Interfaces;
 
@@ -22,7 +22,7 @@ public class CategoriesControllerTests
 
         var context = new ApplicationDbContext(options);
 
-        // seed
+        
         if (!await context.Categories.AnyAsync())
         {
             context.Categories.Add(new Category { Id = 1, Name = "Work" });

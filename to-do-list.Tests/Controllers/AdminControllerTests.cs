@@ -14,12 +14,12 @@ public class AdminControllerTests
     private async Task<ApplicationDbContext> GetInMemoryDbContextAsync()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString()) // нова база за всеки тест
+            .UseInMemoryDatabase(Guid.NewGuid().ToString()) 
             .Options;
 
         var context = new ApplicationDbContext(options);
 
-        // Създаване на задължителни обекти
+        
         var category = new Category { Id = 1, Name = "TestCat" };
         var priority = new Priority { Id = 1, Name = "High", Color = "#ff0000" }; 
         var user = new ApplicationUser { Id = "user1", UserName = "test@abv.bg", Email = "test@abv.bg" };

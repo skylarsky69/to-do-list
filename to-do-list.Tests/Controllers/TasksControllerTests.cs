@@ -13,7 +13,7 @@ using to_do_list.Models;
 using Xunit;
 using System.Linq;
 
-// НОВО:
+
 using to_do_list.Services;
 using to_do_list.Services.Interfaces;
 
@@ -39,7 +39,7 @@ public class TasksControllerTests
 
         var testUserId = "user123";
 
-        // Seed
+       
         using (var context = new ApplicationDbContext(options))
         {
             var category = new Category { Id = 1, Name = "Тест Категория" };
@@ -60,13 +60,13 @@ public class TasksControllerTests
             await context.SaveChangesAsync();
         }
 
-        // Act (нов контекст + реална TaskService)
+        
         using (var context = new ApplicationDbContext(options))
         {
             var taskService = new TaskService(context);
             var userManager = MockUserManagerReturning(testUserId);
 
-            // Забележка: използваме конструктора без DbContext, защото ViewData списъците не са цел на този тест
+          
             var controller = new TasksController(taskService, userManager);
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(new[]
