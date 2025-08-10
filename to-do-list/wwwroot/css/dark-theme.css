@@ -136,3 +136,45 @@ footer.footer {
     footer.footer a {
         color: var(--text) !important;
     }
+/* ---- Убийци на бялото за dark mode ---- */
+
+/* Всички вариации на "бяло" по контейнери и карти */
+.bg-white,
+.bg-light,
+.card.bg-white,
+.card.bg-light,
+.card-body.bg-white,
+.card-body.bg-light {
+    background-color: var(--bg-surface) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+}
+
+/* Класът bg-opacity-75 често се лепи към bg-white */
+.bg-opacity-75 {
+    --bs-bg-opacity: 1 !important;
+    background-color: var(--bg-surface) !important;
+}
+
+/* List-group-ите вътре в карти (типичното „бяло блокче“) */
+.card .list-group,
+.card .list-group-flush,
+.list-group,
+.list-group-flush {
+    background-color: var(--bg-surface) !important;
+    border-color: var(--border) !important;
+}
+
+.card .list-group-item,
+.list-group-item {
+    background-color: var(--bg-surface) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+}
+
+/* Ако има inline класове тип bg-white на каквото и да е */
+[class*="bg-white"],
+[class*="bg-light"] {
+    background-color: var(--bg-surface) !important;
+    color: var(--text) !important;
+}

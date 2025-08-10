@@ -21,7 +21,7 @@ public class AdminControllerTests
 
         // Създаване на задължителни обекти
         var category = new Category { Id = 1, Name = "TestCat" };
-        var priority = new Priority { Id = 1, Name = "High", Color = "#ff0000" }; // 👈 добавено Color
+        var priority = new Priority { Id = 1, Name = "High", Color = "#ff0000" }; 
         var user = new ApplicationUser { Id = "user1", UserName = "test@abv.bg", Email = "test@abv.bg" };
 
         context.Categories.Add(category);
@@ -47,22 +47,22 @@ public class AdminControllerTests
     [Fact]
     public async Task Dashboard_ReturnsViewWithModel()
     {
-        // Arrange
+        
         var context = await GetInMemoryDbContextAsync();
         var controller = new AdminController(context);
 
-        // Act
+        
         var result = await controller.Dashboard();
 
-        // Assert
+        
         var viewResult = Assert.IsType<ViewResult>(result);
         var model = Assert.IsType<AdminDashboardViewModel>(viewResult.Model);
 
-        Assert.Equal(1, model.TotalUsers);           // 🟢 Ще мине
-        Assert.Equal(1, model.TotalTasks);           // 🟢 Ще мине
-        Assert.Equal(0, model.CompletedTasks);       // 🟢 Задачата не е изпълнена
-        Assert.Equal(1, model.IncompleteTasks);      // 🟢 Има една незавършена
-        Assert.Single(model.TasksByCategory);        // 🟢 1 категория
-        Assert.Single(model.TasksPerUser);           // 🟢 1 потребител с задача
+        Assert.Equal(1, model.TotalUsers);           
+        Assert.Equal(1, model.TotalTasks);           
+        Assert.Equal(0, model.CompletedTasks);       
+        Assert.Equal(1, model.IncompleteTasks);      
+        Assert.Single(model.TasksByCategory);        
+        Assert.Single(model.TasksPerUser);           
     }
 }

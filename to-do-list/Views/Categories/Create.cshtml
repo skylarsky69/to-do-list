@@ -7,7 +7,7 @@
 <h2 class="mb-4">@ViewData["Title"]</h2>
 
 <form asp-action="Create" method="post">
-    @Html.AntiForgeryToken() <!-- 🔒 ЗАДЪЛЖИТЕЛНО ЗА РАБОТА НА POST -->
+    @Html.AntiForgeryToken() 
 
     <div class="mb-3">
         <label asp-for="Name" class="form-label">Име на категория</label>

@@ -4,10 +4,10 @@
 
 namespace to_do_list.Data.Migrations
 {
-    /// <inheritdoc />
+  
     public partial class AddTodoTaskToDb : Migration
     {
-        /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
@@ -75,7 +75,7 @@ namespace to_do_list.Data.Migrations
                 onDelete: ReferentialAction.Cascade);
         }
 
-        /// <inheritdoc />
+      
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(

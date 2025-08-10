@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace to_do_list.Data.Migrations
 {
-    /// <inheritdoc />
+   
     public partial class InitialCreate : Migration
     {
-        /// <inheritdoc />
+     
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(

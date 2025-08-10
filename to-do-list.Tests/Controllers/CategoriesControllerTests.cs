@@ -8,28 +8,37 @@ using Xunit;
 using System.Linq;
 using System.Collections.Generic;
 
+// НОВО:
+using to_do_list.Services;
+using to_do_list.Services.Interfaces;
+
 public class CategoriesControllerTests
 {
-    private async Task<ApplicationDbContext> GetInMemoryDbContextAsync()
+    private async Task<(ApplicationDbContext ctx, ICategoryService service)> GetInMemoryWithServiceAsync(string dbName)
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase("CategoriesTestDb")
+            .UseInMemoryDatabase(dbName)
             .Options;
 
         var context = new ApplicationDbContext(options);
 
-        context.Categories.Add(new Category { Id = 1, Name = "Work" });
-        context.Categories.Add(new Category { Id = 2, Name = "Personal" });
+        // seed
+        if (!await context.Categories.AnyAsync())
+        {
+            context.Categories.Add(new Category { Id = 1, Name = "Work" });
+            context.Categories.Add(new Category { Id = 2, Name = "Personal" });
+            await context.SaveChangesAsync();
+        }
 
-        await context.SaveChangesAsync();
-        return context;
+        var service = new CategoryService(context);
+        return (context, service);
     }
 
     [Fact]
     public async Task Index_ReturnsAllCategories()
     {
-        var context = await GetInMemoryDbContextAsync();
-        var controller = new CategoriesController(context);
+        var (context, service) = await GetInMemoryWithServiceAsync("CategoriesTestDb_Index");
+        var controller = new CategoriesController(service);
 
         var result = await controller.Index();
 
@@ -43,17 +52,19 @@ public class CategoriesControllerTests
     public async Task Create_AddsCategory()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase("CreateCategoryTestDb")
+            .UseInMemoryDatabase("CategoriesTestDb_Create")
             .Options;
 
         using var context = new ApplicationDbContext(options);
-        var controller = new CategoriesController(context);
+        var service = new CategoryService(context);
+        var controller = new CategoriesController(service);
 
         var newCategory = new Category { Name = "NewCategory" };
         var result = await controller.Create(newCategory);
 
         var redirect = Assert.IsType<RedirectToActionResult>(result);
         Assert.Equal("Index", redirect.ActionName);
+
         Assert.Equal(1, context.Categories.Count());
         Assert.Equal("NewCategory", context.Categories.First().Name);
     }

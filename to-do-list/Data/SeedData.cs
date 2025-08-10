@@ -15,7 +15,7 @@ namespace to_do_list.Data
 
             if (context.Categories.Any())
             {
-                return; // Категориите вече съществуват
+                return; 
             }
 
             context.Categories.AddRange(

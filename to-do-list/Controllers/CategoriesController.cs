@@ -1,94 +1,66 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using to_do_list.Data;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using to_do_list.Models;
+using to_do_list.Services.Interfaces;
 
 namespace to_do_list.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICategoryService _categories;
 
-        public CategoriesController(ApplicationDbContext context)
+        public CategoriesController(ICategoryService categories)
         {
-            _context = context;
+            _categories = categories;
         }
 
-        // Всички категории
+        // GET: /Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            var model = await _categories.GetAllAsync();
+            return View(model);
         }
 
-        // 👉 GET: Categories/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        // GET: /Categories/Create
+        public IActionResult Create() => View();
 
-        // 👉 POST: Categories/Create
+        // POST: /Categories/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Category category)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Categories.Add(category);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            if (!ModelState.IsValid) return View(category);
 
-            return View(category);
+            await _categories.CreateAsync(category);
+            return RedirectToAction(nameof(Index));
         }
 
-
-        // 👉 GET: Categories/Edit/5
+        // GET: /Categories/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _categories.GetByIdAsync(id);
             if (category == null) return NotFound();
             return View(category);
         }
 
-        // 👉 POST: Categories/Edit/5
+        // POST: /Categories/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Category category)
         {
             if (id != category.Id) return BadRequest();
+            if (!ModelState.IsValid) return View(category);
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Categories.Any(c => c.Id == id))
-                        return NotFound();
-                    throw;
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(category);
+            await _categories.UpdateAsync(category);
+            return RedirectToAction(nameof(Index));
         }
 
-        // 👉 POST: Categories/Delete/5 (изтриване директно с form бутон)
+        // POST: /Categories/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category != null)
-            {
-                _context.Categories.Remove(category);
-                await _context.SaveChangesAsync();
-            }
-
+            await _categories.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -4,10 +4,10 @@
 
 namespace to_do_list.Data.Migrations
 {
-    /// <inheritdoc />
+    
     public partial class AddIsCompletedToTodoTask : Migration
     {
-        /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
@@ -18,7 +18,7 @@ namespace to_do_list.Data.Migrations
                 defaultValue: false);
         }
 
-        /// <inheritdoc />
+       
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(

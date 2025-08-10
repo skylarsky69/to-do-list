@@ -3,13 +3,17 @@ using to_do_list.Data;
 using to_do_list.Models;
 using Microsoft.AspNetCore.Identity;
 
+// services
+using to_do_list.Services;
+using to_do_list.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Свързване към SQL Server
+// DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Регистрация на Identity + роли
+// Identity + Roles
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
@@ -17,61 +21,15 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+// MVC + Razor
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+// Бизнес логика
+builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
 var app = builder.Build();
-
-// 👉 Seed категории + роли и админ акаунт
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-
-    try
-    {
-        // Seed категории
-        SeedCategoryData.Initialize(services);
-
-        // 👉 Seed роли + админ
-        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-
-        string[] roles = { "Admin", "User" };
-
-        foreach (var role in roles)
-        {
-            if (!await roleManager.RoleExistsAsync(role))
-            {
-                await roleManager.CreateAsync(new IdentityRole(role));
-            }
-        }
-
-        // Админ потребител
-        string adminEmail = "admin@example.com";
-        string adminPassword = "Admin123!";
-
-        var adminUser = await userManager.FindByEmailAsync(adminEmail);
-        if (adminUser == null)
-        {
-            adminUser = new ApplicationUser
-            {
-                UserName = adminEmail,
-                Email = adminEmail,
-                EmailConfirmed = true
-            };
-            var result = await userManager.CreateAsync(adminUser, adminPassword);
-            if (result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(adminUser, "Admin");
-            }
-        }
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Грешка при инициализация на Seed данните.");
-    }
-}
 
 if (!app.Environment.IsDevelopment())
 {
@@ -85,7 +43,9 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -93,5 +53,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
 app.MapRazorPages();
 app.Run();
+
