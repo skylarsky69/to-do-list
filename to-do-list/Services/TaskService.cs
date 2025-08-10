@@ -47,12 +47,21 @@ namespace to_do_list.Services
 
         public async Task UpdateAsync(TodoTask task, string userId)
         {
-            // защита: ъпдейт само на свои задачи
-            var existing = await _context.TodoTasks.AsNoTracking()
+            // Зареждаме текущата задача на този потребител
+            var entity = await _context.TodoTasks
                 .FirstOrDefaultAsync(t => t.Id == task.Id && t.UserId == userId);
-            if (existing == null) throw new UnauthorizedAccessException();
 
-            _context.TodoTasks.Update(task);
+            if (entity == null)
+                throw new UnauthorizedAccessException("Task not found or not owned by user.");
+
+            // Обновяваме само позволените полета (UserId не пипаме)
+            entity.Title = task.Title;
+            entity.Description = task.Description;
+            entity.DueDate = task.DueDate;
+            entity.CategoryId = task.CategoryId;
+            entity.PriorityId = task.PriorityId;
+            entity.IsCompleted = task.IsCompleted;
+
             await _context.SaveChangesAsync();
         }
 
@@ -60,6 +69,7 @@ namespace to_do_list.Services
         {
             var task = await _context.TodoTasks.FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
             if (task == null) return;
+
             _context.TodoTasks.Remove(task);
             await _context.SaveChangesAsync();
         }
@@ -67,10 +77,10 @@ namespace to_do_list.Services
         public async Task ToggleStatusAsync(int id, string userId)
         {
             var task = await _context.TodoTasks.FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
-            if (task == null) throw new UnauthorizedAccessException();
+            if (task == null)
+                throw new UnauthorizedAccessException("Task not found or not owned by user.");
 
             task.IsCompleted = !task.IsCompleted;
-            _context.TodoTasks.Update(task);
             await _context.SaveChangesAsync();
         }
     }
