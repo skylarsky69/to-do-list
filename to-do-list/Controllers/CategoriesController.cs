@@ -14,17 +14,16 @@ namespace to_do_list.Controllers
             _categories = categories;
         }
 
-        // GET: /Categories
+      
         public async Task<IActionResult> Index()
         {
             var model = await _categories.GetAllAsync();
             return View(model);
         }
 
-        // GET: /Categories/Create
         public IActionResult Create() => View();
 
-        // POST: /Categories/Create
+     
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Category category)
@@ -35,7 +34,7 @@ namespace to_do_list.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Categories/Edit/5
+       
         public async Task<IActionResult> Edit(int id)
         {
             var category = await _categories.GetByIdAsync(id);
@@ -43,7 +42,7 @@ namespace to_do_list.Controllers
             return View(category);
         }
 
-        // POST: /Categories/Edit/5
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Category category)
@@ -55,7 +54,7 @@ namespace to_do_list.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: /Categories/Delete/5
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)

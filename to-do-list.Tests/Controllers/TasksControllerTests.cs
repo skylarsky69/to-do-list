@@ -33,7 +33,7 @@ public class TasksControllerTests
 
         var testUserId = "user123";
 
-        // seed
+        
         using (var seedCtx = new ApplicationDbContext(options))
         {
             var category = new Category { Id = 1, Name = "Тест Категория" };
@@ -54,13 +54,13 @@ public class TasksControllerTests
             await seedCtx.SaveChangesAsync();
         }
 
-        // run test
+        
         using (var context = new ApplicationDbContext(options))
         {
             var taskService = new TaskService(context);
             var userManager = MockUserManagerReturning(testUserId);
 
-            // 👉 подаваме и context към конструктора
+           
             var controller = new TasksController(taskService, userManager, context);
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(new[]

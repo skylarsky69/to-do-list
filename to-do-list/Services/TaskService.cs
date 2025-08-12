@@ -47,14 +47,14 @@ namespace to_do_list.Services
 
         public async Task UpdateAsync(TodoTask task, string userId)
         {
-            // Зареждаме текущата задача на този потребител
+           
             var entity = await _context.TodoTasks
                 .FirstOrDefaultAsync(t => t.Id == task.Id && t.UserId == userId);
 
             if (entity == null)
                 throw new UnauthorizedAccessException("Task not found or not owned by user.");
 
-            // Обновяваме само позволените полета (UserId не пипаме)
+         
             entity.Title = task.Title;
             entity.Description = task.Description;
             entity.DueDate = task.DueDate;

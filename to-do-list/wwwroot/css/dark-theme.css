@@ -1,13 +1,13 @@
-﻿/* ====== Dark theme base (Bootstrap 5 friendly) ====== */
+﻿
 :root {
-    /* твои базови цветове */
+ 
     --bg-body: #0b0e12;
     --bg-surface: #10141a;
     --bg-panel: #121821;
     --border: #1b2330;
     --text: #e7ecf3;
     --text-muted: #a8b0bd;
-    /* подменяме Bootstrap CSS променливите */
+   
     --bs-body-bg: var(--bg-body);
     --bs-body-color: var(--text);
     --bs-card-bg: var(--bg-surface);
@@ -33,7 +33,7 @@ body {
     color: var(--text) !important;
 }
 
-/* ====== Navbar (тъмна) ====== */
+/* Navbar (тъмна)  */
 #mainNavbar {
     background-color: var(--bg-panel) !important;
     border-bottom: 1px solid var(--border) !important;
@@ -59,7 +59,7 @@ body {
         color: var(--text) !important;
     }
 
-/* ====== Cards / panels ====== */
+
 .card,
 .card .card-body,
 .card .card-header,
@@ -69,7 +69,7 @@ body {
     border-color: var(--border) !important;
 }
 
-    /* ====== List group – това е „бялото блокче“ ====== */
+  
     .list-group,
     .list-group-flush,
     .card .list-group,
@@ -82,7 +82,7 @@ body {
         .card .list-group-item,
         .list-group-flush > .list-group-item,
         .card .list-group-flush > .list-group-item {
-            background-color: var(--bg-surface) !important; /* ключът към проблема */
+            background-color: var(--bg-surface) !important; 
             color: var(--text) !important;
             border-color: var(--border) !important;
         }
@@ -92,7 +92,7 @@ body {
                 background-color: #0d1218 !important;
             }
 
-/* ====== Tables ====== */
+
 .table,
 .table th,
 .table td,
@@ -106,7 +106,7 @@ body {
     background-color: #0d1218 !important;
 }
 
-/* ====== Forms ====== */
+
 .form-control,
 .form-select,
 .input-group-text {
@@ -119,7 +119,7 @@ body {
         color: var(--text-muted) !important;
     }
 
-/* ====== Utility: ако имаш някъде bg-white/bg-light в markup ====== */
+
 .bg-white,
 .bg-light {
     background-color: var(--bg-surface) !important;
@@ -127,7 +127,7 @@ body {
     border-color: var(--border) !important;
 }
 
-/* Footer */
+
 footer.footer {
     background-color: var(--bg-panel) !important;
     color: var(--text-muted) !important;
@@ -136,9 +136,9 @@ footer.footer {
     footer.footer a {
         color: var(--text) !important;
     }
-/* ---- Убийци на бялото за dark mode ---- */
 
-/* Всички вариации на "бяло" по контейнери и карти */
+
+
 .bg-white,
 .bg-light,
 .card.bg-white,
@@ -150,13 +150,13 @@ footer.footer {
     border-color: var(--border) !important;
 }
 
-/* Класът bg-opacity-75 често се лепи към bg-white */
+
 .bg-opacity-75 {
     --bs-bg-opacity: 1 !important;
     background-color: var(--bg-surface) !important;
 }
 
-/* List-group-ите вътре в карти (типичното „бяло блокче“) */
+
 .card .list-group,
 .card .list-group-flush,
 .list-group,
@@ -172,9 +172,10 @@ footer.footer {
     border-color: var(--border) !important;
 }
 
-/* Ако има inline класове тип bg-white на каквото и да е */
+
 [class*="bg-white"],
 [class*="bg-light"] {
     background-color: var(--bg-surface) !important;
     color: var(--text) !important;
 }
+

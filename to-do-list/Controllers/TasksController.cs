@@ -16,7 +16,6 @@ namespace to_do_list.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
 
-        // Единствен продукционен конструктор (без алтернативи за да няма DI конфликт)
         [ActivatorUtilitiesConstructor]
         public TasksController(ITaskService tasks, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
@@ -86,7 +85,7 @@ namespace to_do_list.Controllers
                 return View(task);
             }
 
-            // гаранция, че няма да отиде NULL към базата
+           
             task.UserId = userId;
 
             await _tasks.UpdateAsync(task, userId);
